@@ -18,7 +18,8 @@ public class UserSession {
 
     private final String userSessionId;
 
-    @OneToMany(mappedBy = "userSession")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userSession")
+    @ElementCollection
     private List<ChatSession> chatSessionList;
 
     public UserSession() {
