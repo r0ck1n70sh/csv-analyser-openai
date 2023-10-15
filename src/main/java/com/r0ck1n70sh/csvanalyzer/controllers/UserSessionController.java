@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.StreamSupport;
+
 
 @Controller
 @RequestMapping("/api/user_session")
@@ -15,8 +18,9 @@ public class UserSessionController {
 
     @GetMapping("/")
     @ResponseBody
-    public String view() {
-        return "user_session";
+    public List<UserSession> view() {
+        Iterable<UserSession> iterable = userSessionRepository.findAll();
+        return StreamSupport.stream(iterable.spliterator(), false).toList();
     }
 
     @PostMapping("/")
