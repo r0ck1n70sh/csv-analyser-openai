@@ -1,5 +1,6 @@
 package com.r0ck1n70sh.csvanalyzer.controllers;
 
+import com.r0ck1n70sh.csvanalyzer.crud.RawCsvMetaCrud;
 import com.r0ck1n70sh.csvanalyzer.csv.CsvParser;
 import com.r0ck1n70sh.csvanalyzer.entities.RawCsvMeta;
 import com.r0ck1n70sh.csvanalyzer.repositories.RawCsvColumnRepository;
@@ -15,7 +16,7 @@ import java.util.Map;
 import java.util.stream.StreamSupport;
 
 @Controller
-@RequestMapping("/api/raw_csv")
+@RequestMapping("/api/raw_csv/")
 public class RawCsvController {
     @Autowired
     private RawCsvMetaRepository metaRepository;
@@ -56,10 +57,7 @@ public class RawCsvController {
         CsvParser csvParser = new CsvParser(data, name);
         RawCsvMeta rawCsvMeta = csvParser.parse();
 
-        rawCsvMeta.getDataPoints().forEach(dataPoint -> dataPointRepository.save(dataPoint));
-        rawCsvMeta.getColumns().forEach(column -> columnRepository.save(column));
-
-        metaRepository.save(rawCsvMeta);
+        RawCsvMetaCrud.save(rawCsvMeta);
 
         return rawCsvMeta;
     }
