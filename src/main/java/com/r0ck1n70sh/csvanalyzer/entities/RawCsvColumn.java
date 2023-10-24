@@ -20,6 +20,11 @@ public class RawCsvColumn {
 
     private String name;
 
+    @Enumerated
+    private ColumnType type;
+
+    private String unit;
+
     @ManyToOne
     @JoinColumn(name = "meta_id")
     @JsonIgnore
