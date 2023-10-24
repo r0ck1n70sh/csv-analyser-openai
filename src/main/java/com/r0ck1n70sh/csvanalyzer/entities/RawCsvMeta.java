@@ -1,5 +1,6 @@
 package com.r0ck1n70sh.csvanalyzer.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,11 +21,18 @@ public class RawCsvMeta {
 
     private int size;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "meta")
     @ElementCollection
     private List<RawCsvColumn> columns;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "meta")
     @ElementCollection
+    @JsonIgnore
     private List<RawCsvDataPoint> dataPoints;
+
+    @OneToOne
+    @JsonIgnore
+    private ChatSession chatSession;
 
     public RawCsvMeta() {
         this.columns = new ArrayList<>();
