@@ -1,5 +1,6 @@
 package com.r0ck1n70sh.csvanalyzer.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,10 +16,12 @@ public class RawCsvDataPoint {
 
     @ManyToOne
     @JoinColumn(name = "meta_id")
+    @JsonIgnore
     private RawCsvMeta meta;
 
     @ManyToOne
     @JoinColumn(name = "column_id")
+    @JsonIgnore
     private RawCsvColumn column;
 
     private int index;
