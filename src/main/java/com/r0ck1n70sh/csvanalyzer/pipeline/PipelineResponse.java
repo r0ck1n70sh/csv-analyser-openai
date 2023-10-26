@@ -5,10 +5,12 @@ import com.r0ck1n70sh.csvanalyzer.graphs.Graph;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class PipelineResponse {
-    private Graph graph;
+    private List<Graph> graphs;
     private String message;
     private ChatStatus status;
 
@@ -17,12 +19,12 @@ public class PipelineResponse {
         return String.format(
                 """
                         {
-                            "graph": %s,
+                            "graphs": %s,
                             "message": %s,
                             "status": %s
                         }
                         """,
-                graph, message, status
+                graphs, message, status
         );
     }
 }
