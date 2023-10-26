@@ -10,8 +10,8 @@ import com.r0ck1n70sh.csvanalyzer.enums.ChatStatus;
 import com.r0ck1n70sh.csvanalyzer.enums.ColumnType;
 import com.r0ck1n70sh.csvanalyzer.openai.OpenAiServiceInstance;
 import com.r0ck1n70sh.csvanalyzer.openai.functions.ChatFunctionExecutors;
-import com.r0ck1n70sh.csvanalyzer.openai.functions.GetSampleDataArgs;
-import com.r0ck1n70sh.csvanalyzer.openai.functions.IsValidJsonArgs;
+import com.r0ck1n70sh.csvanalyzer.openai.functions.ColumnNameArgs;
+import com.r0ck1n70sh.csvanalyzer.openai.functions.JsonObjectStrArgs;
 import com.r0ck1n70sh.csvanalyzer.openai.functions.NoArgs;
 import com.r0ck1n70sh.csvanalyzer.utils.JsonUtils;
 import com.theokanning.openai.completion.chat.*;
@@ -109,13 +109,16 @@ public class CsvProcessorComponent implements Component {
                     String functionName = functionCall.getName();
                     ChatMessage errorFunctionMessage = buildErrorFunctionMessage(functionName);
                     messages.add(errorFunctionMessage);
-                    continue;
-                }
 
-                messages.add(optional.get());
+                } else {
+                    messages.add(optional.get());
+                }
             }
 
             if (content != null) {
+                content = content.replace("```json", "");
+                content = content.replace("```", "");
+
                 boolean isValidJson = JsonUtils.isValidJsonObjectString(content);
                 if (!isValidJson) {
                     ChatMessage errorInvalidJsonMessage = buildErrorInvalidJsonMessage(content);
@@ -159,14 +162,14 @@ public class CsvProcessorComponent implements Component {
                 ChatFunctionExecutors.buildChatFunction(
                         "is_valid_json",
                         "Verify whether string/text is a valid JSON",
-                        IsValidJsonArgs.class,
-                        args -> ChatFunctionExecutors.isValidJsonStr(args.jsonStr)),
+                        JsonObjectStrArgs.class,
+                        args -> ChatFunctionExecutors.isValidJsonObjectStr(args.jsonStr)),
 
                 ChatFunctionExecutors.buildChatFunction(
                         "get_column_types",
                         "Get all valid column type ex. Categorical",
                         NoArgs.class,
-                        args -> ChatFunctionExecutors.getColumnType()
+                        args -> ChatFunctionExecutors.getColumnTypes()
                 ),
 
                 ChatFunctionExecutors.buildChatFunction(
@@ -179,8 +182,8 @@ public class CsvProcessorComponent implements Component {
                 ChatFunctionExecutors.buildChatFunction(
                         "get_sample_data",
                         "Get data points for a particular column name ex. Year",
-                        GetSampleDataArgs.class,
-                        args -> ChatFunctionExecutors.getSampleData(args.columnName, args.outputSize, csv)
+                        ColumnNameArgs.class,
+                        args -> ChatFunctionExecutors.getSampleData(args.columnName, 5, csv)
                 )
         };
 
@@ -261,12 +264,10 @@ public class CsvProcessorComponent implements Component {
         }
 
         if (!extra.isEmpty()) {
-            String message = String.format("""
-                            Following columns are invalid, in json output:
-                            %s
-                            call "get_column_names", for all columns
-                            """,
-                    formattedColumns(extra));
+            String message = """
+                    Following columns are invalid, in json output,
+                    call "get_column_names", for all columns
+                    """;
 
             ChatMessage chatMessage = new ChatMessage(ChatMessageRole.SYSTEM.value(), message);
             errorMessages.add(chatMessage);
