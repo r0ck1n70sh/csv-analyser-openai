@@ -8,8 +8,8 @@ public enum ChatMessageEntityRole {
     ASSISTANT("assistant", ChatMessageRole.ASSISTANT),
     FUNCTION("function", ChatMessageRole.FUNCTION);
 
-    private final String name;
-    private final ChatMessageRole role;
+    public final String name;
+    public final ChatMessageRole role;
 
     ChatMessageEntityRole(String name, ChatMessageRole role) {
         this.name = name;
