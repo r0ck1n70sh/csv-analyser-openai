@@ -1,41 +1,31 @@
 package com.r0ck1n70sh.csvanalyzer.graphs;
 
+import com.google.gson.JsonArray;
 import com.r0ck1n70sh.csvanalyzer.enums.ColumnType;
 import com.r0ck1n70sh.csvanalyzer.enums.GraphType;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
 public class Graph {
     private GraphType type;
-
-    private List<String> x;
-    private ColumnType x_type;
-
-    private List<String> y;
-    private ColumnType y_type;
-
-    private List<String> z;
-    private ColumnType z_type;
+    private List<Map<String, String>> dataPoints;
+    private Map<String, ColumnType> columnTypeMap;
 
     @Override
     public String toString() {
-        return String.format(
-                """
+        return String.format("""
                         {
                             "type": %s,
-                            "x": %s,
-                            "x_type": %s,
-                            "y": %s,
-                            "y_type": %s,
-                            "z": %s.
-                            "z_type": %s.
+                            "dataPoints": %s,
+                            "columnTypeMap": %s
                         }
                         """,
-                type, x, x_type, y, y_type, z, z_type
+                type, dataPoints, columnTypeMap
         );
     }
 }
