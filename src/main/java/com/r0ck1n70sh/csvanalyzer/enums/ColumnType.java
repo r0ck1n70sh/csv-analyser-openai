@@ -6,7 +6,7 @@ public enum ColumnType {
     NUMERICAL("numerical"),
     TEMPORAL("temporal");
 
-    private final String name;
+    public final String name;
 
     ColumnType(String name) {
         this.name = name;
