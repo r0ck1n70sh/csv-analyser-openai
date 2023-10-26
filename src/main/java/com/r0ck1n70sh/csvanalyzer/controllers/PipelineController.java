@@ -1,9 +1,6 @@
 package com.r0ck1n70sh.csvanalyzer.controllers;
 
-import com.r0ck1n70sh.csvanalyzer.crud.ChatSessionCrud;
-import com.r0ck1n70sh.csvanalyzer.crud.RawCsvColumnCrud;
-import com.r0ck1n70sh.csvanalyzer.crud.RawCsvDataPointCrud;
-import com.r0ck1n70sh.csvanalyzer.crud.RawCsvMetaCrud;
+import com.r0ck1n70sh.csvanalyzer.crud.*;
 import com.r0ck1n70sh.csvanalyzer.entities.ChatSession;
 import com.r0ck1n70sh.csvanalyzer.entities.UserSession;
 import com.r0ck1n70sh.csvanalyzer.enums.ChatStatus;
@@ -44,6 +41,9 @@ public class PipelineController {
     public void initialize() {
         ChatSessionCrud chatSessionCrud = ChatSessionCrud.getInstance();
         chatSessionCrud.setRepository(chatSessionRepository);
+
+        ChatMessageEntityCrud chatMessageEntityCrud = ChatMessageEntityCrud.getInstance();
+        chatMessageEntityCrud.setRepository(chatMessageEntityRepository);
 
         RawCsvDataPointCrud rawCsvDataPointCrud = RawCsvDataPointCrud.getInstance();
         rawCsvDataPointCrud.setRepository(rawCsvDataPointRepository);
@@ -105,7 +105,7 @@ public class PipelineController {
         AbstractComponentFactory abstractComponentFactory = new AbstractComponentFactory(
                 request.getCsvStr(),
                 request.getCsvName(),
-                null,
+                request.getUserPrompt(),
                 status);
 
         ComponentFactory componentFactory = abstractComponentFactory.create();
