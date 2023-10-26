@@ -30,7 +30,7 @@ public class ChatSessionCrud {
 
     public static void save(@NonNull ChatSession entity) {
         List<ChatMessageEntity> messages = entity.getMessages();
-        messages.forEach(ChatMessageEntityCrud::save);
+        ChatMessageEntityCrud.saveAll(messages);
         messages.forEach(m -> m.setChatSession(entity));
 
         RawCsvMeta csv = entity.getCsv();
