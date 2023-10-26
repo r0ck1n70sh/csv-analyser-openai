@@ -19,7 +19,7 @@ public class ComponentResponse {
     private ChatMessageEntity response;
     private RawCsvMeta csv;
     private ChatStatus status;
-    private Graph graph;
+    private List<Graph> graphs;
     private Map<String, String[]> columnNameTypeMap;
 
     @Override
@@ -31,10 +31,10 @@ public class ComponentResponse {
                             "response": %s,
                             "csv": %s,
                             "status": %s,
-                            "graph": %s
+                            "graphs": %s
                         }
                         """,
-                intermediates, response, csv, status, graph
+                intermediates, response, csv, status, graphs
         );
     }
 }
