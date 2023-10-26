@@ -93,6 +93,8 @@ public class PipelineConductor {
             messages.add(response);
         }
 
+        messages = messages.subList(chatSession.getMessages().size(), messages.size());
+
         chatSession.getMessages().addAll(messages);
     }
 
@@ -107,9 +109,9 @@ public class PipelineConductor {
             pipelineResponse.setMessage(response.getContent());
         }
 
-        Graph graph = componentResponse.getGraph();
-        if (graph != null) {
-            pipelineResponse.setGraph(componentResponse.getGraph());
+        List<Graph> graphs = componentResponse.getGraphs();
+        if (graphs != null) {
+            pipelineResponse.setGraphs(componentResponse.getGraphs());
         }
 
         return pipelineResponse;
